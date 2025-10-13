@@ -11,9 +11,10 @@ const QUANTITY = "0.000010";
 const API_URL = "https://testnet.binance.vision"; // mainnet real
 const API_KEY = process.env.API_KEY;
 const SECRET_KEY = process.env.SECRET_KEY;
-
 let IsOpened = false;
-if (!fs.existsSync("./logs")) fs.mkdirSync("./logs"); // Cria pasta logs se não existir
+
+// Cria pasta logs se não existir
+if (!fs.existsSync("./logs")) fs.mkdirSync("./logs");
 
 // FUNÇÃO SMA
 function calcSMA(data) {
@@ -55,6 +56,7 @@ async function newOrder(symbol, quantity, side) {
       "./logs/trades.log",
       `${new Date().toISOString()} - ${side} - ${symbol} - ${price}\n`
     );
+
   } catch (err) {
     console.error(
       "❌ Erro ao enviar ordem:",
@@ -90,10 +92,12 @@ async function start() {
       IsOpened = true;
       console.log("🟢 Comprar");
       await newOrder(SYMBOL, QUANTITY, "BUY");
+
     } else if (diffPercent >= SELL_THRESHOLD && IsOpened) {
       console.log("🔴 Vender");
       await newOrder(SYMBOL, QUANTITY, "SELL");
       IsOpened = false;
+
     } else {
       console.log("Aguardar Sinal...");
     }
